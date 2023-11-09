@@ -2,69 +2,83 @@ from page_object.forgot_password_page import ForgotPassword
 from page_object.home_page import HomePage
 from page_object.login_page import LoginPage
 from page_object.registration_page import RegistrationPage
+from selenium import webdriver
 
 
 class TestLogin:
+    driver = None
 
-    def test_login_from_home_page(self, driver):
-        driver.get("https://stellarburgers.nomoreparties.site/")
-        home_page = HomePage(driver)
+    @classmethod
+    def setup_class(cls):
+        cls.driver = webdriver.Chrome()
+
+    def test_login_from_home_page(self):
+        self.driver.get("https://stellarburgers.nomoreparties.site/")
+        home_page = HomePage(self.driver)
 
         home_page.waiting_visibility_login_button()
         home_page.click_login_button()
 
-        login_page = LoginPage(driver)
+        login_page = LoginPage(self.driver)
         login_page.waiting_visibility_email_input()
         login_page.fill_email("andrey_yakovlev_2_11@mail.ru")
         login_page.fill_password("TestPassword")
         login_page.click_login_button()
 
         home_page.waiting_visibility_create_order_button()
-        driver.quit()
 
-    def test_login_from_personal_area(self, driver):
-        driver.get("https://stellarburgers.nomoreparties.site/login")
+        assert "Оформить заказ" in self.driver.find_element(*home_page.CREATE_ORDER_BUTTON).text
 
-        login_page = LoginPage(driver)
+    def test_login_from_personal_area(self):
+        self.driver.get("https://stellarburgers.nomoreparties.site/login")
+
+        login_page = LoginPage(self.driver)
         login_page.waiting_visibility_email_input()
         login_page.fill_email("andrey_yakovlev_2_11@mail.ru")
         login_page.fill_password("TestPassword")
         login_page.click_login_button()
 
-        home_page = HomePage(driver)
+        home_page = HomePage(self.driver)
         home_page.waiting_visibility_create_order_button()
-        driver.quit()
 
-    def test_login_from_registration_form(self, driver):
-        driver.get("https://stellarburgers.nomoreparties.site/register")
+        assert "Оформить заказ" in self.driver.find_element(*home_page.CREATE_ORDER_BUTTON).text
 
-        registration_page = RegistrationPage(driver)
+    def test_login_from_registration_form(self):
+        self.driver.get("https://stellarburgers.nomoreparties.site/register")
+
+        registration_page = RegistrationPage(self.driver)
         registration_page.waiting_visibility_login_button()
         registration_page.click_login_button()
 
-        login_page = LoginPage(driver)
+        login_page = LoginPage(self.driver)
         login_page.waiting_visibility_email_input()
         login_page.fill_email("andrey_yakovlev_2_11@mail.ru")
         login_page.fill_password("TestPassword")
         login_page.click_login_button()
 
-        home_page = HomePage(driver)
+        home_page = HomePage(self.driver)
         home_page.waiting_visibility_create_order_button()
-        driver.quit()
 
-    def test_login_from_forgot_password_form(self, driver):
-        driver.get("https://stellarburgers.nomoreparties.site/forgot-password")
+        assert "Оформить заказ" in self.driver.find_element(*home_page.CREATE_ORDER_BUTTON).text
 
-        forgot_password_page = ForgotPassword(driver)
+    def test_login_from_forgot_password_form(self):
+        self.driver.get("https://stellarburgers.nomoreparties.site/forgot-password")
+
+        forgot_password_page = ForgotPassword(self.driver)
         forgot_password_page.waiting_visibility_login_button()
         forgot_password_page.click_login_button()
 
-        login_page = LoginPage(driver)
+        login_page = LoginPage(self.driver)
         login_page.waiting_visibility_email_input()
         login_page.fill_email("andrey_yakovlev_2_11@mail.ru")
         login_page.fill_password("TestPassword")
         login_page.click_login_button()
 
-        home_page = HomePage(driver)
+        home_page = HomePage(self.driver)
         home_page.waiting_visibility_create_order_button()
-        driver.quit()
+
+        assert "Оформить заказ" in self.driver.find_element(*home_page.CREATE_ORDER_BUTTON).text
+
+    @classmethod
+    def teardown_class(cls):
+        cls.driver.quit()

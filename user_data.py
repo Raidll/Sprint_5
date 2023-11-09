@@ -1,16 +1,16 @@
 class UserData:
     def __init__(self, name, email, password):
-        self.__name = name
-        self.__email = email
-        self.__password = password
+        self.name = name
+        self.email = email
+        self.password = password
 
     def get_name(self):
-        return self.__name
+        return self.name
 
     def get_email(self):
-        return self.__email
+        return self.email
 
     def get_password(self):
-        return self.__password
+        return self.password
 
 
